@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv  # <--- Ye naya import hai
+from dotenv import load_dotenv
+import dj_database_url  # <--- ✅ (1) YE MISSING THA, AB DAAL DIYA
 
 # .env file load karo
 load_dotenv()
@@ -10,10 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Ab secret key .env se ayegi
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# Debug mode bhi wahan se control hoga (Safe raho)
+# Debug logic
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+# ✅ (2) ALLOWED_HOSTS FIX: Star '*' ka matlab sabko allow karo (Live ke liye zaroori)
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -55,24 +57,35 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'TravelManager.wsgi.application'
 
-# DATABASE - SECURE CONFIGURATION 🔒
+# DATABASE CONFIGURATION
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'travel_db',
         'USER': 'postgres',
-        'PASSWORD': os.getenv('DB_PASSWORD'),  # <--- Ab password .env se ayega
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
 
+# 👇 LIVE SERVER CONFIGURATION (Render Database Link Karega)
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
 AUTH_PASSWORD_VALIDATORS = []
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+# --- STATIC FILES CONFIGURATION ---
 STATIC_URL = 'static/'
+
+# ✅ (3) STATIC_ROOT FIX: Render ko batana padta hai files kahan rakhni hain
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'landing'
@@ -82,7 +95,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
-# 👇 Ab ye credentials bhi .env se ayenge (Safe!)
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
