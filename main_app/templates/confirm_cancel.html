@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancel Booking - TravelManager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cancel-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            border-top: 5px solid #dc3545; /* Red Warning Line */
+            animation: shake 0.5s ease-in-out; /* Shake Animation */
+        }
+
+        /* WARNING ICON ANIMATION */
+        .warning-icon {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* BUTTONS */
+        .btn-cancel {
+            background: #dc3545;
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-back {
+            background: #e9ecef;
+            color: #333;
+            border: none;
+            padding: 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: #dde2e6;
+        }
+
+        /* Package Name Style */
+        .pkg-name {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* ANIMATIONS */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cancel-card">
+        <i class="fas fa-exclamation-triangle warning-icon"></i>
+        
+        <h2 class="fw-bold mb-2">Are you sure?</h2>
+        <p class="text-muted mb-4">
+            You are about to cancel your trip to <br>
+            <span class="pkg-name mt-2 d-inline-block">{{ booking.package.name }}</span>
+        </p>
+        
+        <div class="alert alert-danger py-2 fs-6 mb-4">
+            <small><i class="fas fa-info-circle me-1"></i> This action cannot be undone.</small>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <button type="submit" class="btn btn-cancel w-100 mb-3">
+                <i class="fas fa-trash-alt me-2"></i> Yes, Cancel It
+            </button>
+            
+            <a href="/dashboard/" class="btn btn-back w-100 text-decoration-none">
+                No, Keep My Trip
+            </a>
+        </form>
+    </div>
+
+</body>
+</html>

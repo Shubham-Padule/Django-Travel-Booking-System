@@ -1,0 +1,21 @@
+# --- Security (Sabse Important) ---
+.env
+
+# --- Python & Django Junk ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Virtual Environment (Heavy Folder) ---
+venv/
+env/
+.venv/
+
+# --- Local Database ---
+db.sqlite3
+*.sqlite3
+
+# --- OS Generated Files (Mac/Windows) ---
+.DS_Store
+Thumbs.db
